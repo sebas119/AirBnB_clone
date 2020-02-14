@@ -5,6 +5,8 @@
 """
 
 import json
+import models
+from models.base_model import BaseModel
 
 
 class FileStorage:
@@ -28,17 +30,18 @@ class FileStorage:
         to_json = {}
         with open(self.__file_path, mode='w', encoding='UTF-8') as myfile:
             for key, val in self.__objects.items():
-                if type(val) != dict:
-                    to_json[key] = val.to_dict()
-                else:
-                    to_json[key] = val
+                to_json[key] = val.to_dict()
             json.dump(to_json, myfile)
 
     def reload(self):
         """Function that creates an Object from a JSON file"""
 
+        from_json = {}
         try:
             with open(self.__file_path, mode='r', encoding="UTF-8") as myfile:
-                self.__objects = json.load(myfile)
+                from_json = json.load(myfile)
+                for key, value in from_json.items():
+                    bm = BaseModel(**value)
+                    self.__objects[key] = bm
         except:
             pass
