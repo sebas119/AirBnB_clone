@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+"""Defines the HBNH command line."""
+
+from shlex import split
 from models.base_model import BaseModel
 from models import storage
 import cmd
@@ -130,7 +133,7 @@ class HBNBCommand(cmd.Cmd):
 
         if len(arg) > 0:
             objects = storage.all()
-            list_arg = arg.split()
+            list_arg = split(arg)
             if len(list_arg) == 1:
                 clsObjs = [str(v) for k, v in objects.items()
                            if arg == k.split('.')[0]]
@@ -156,8 +159,12 @@ class HBNBCommand(cmd.Cmd):
                 if clsId in objects:
                     if list_arg[2] in objects[clsId].to_dict():
                         obj = objects[clsId]
-                        # TODO: Change and cast the attr to update
-                        setattr(obj, list_arg[2], list_arg[3])
+                        if HBNBCommand.RepresentsInt(list_arg[3]):
+                            setattr(obj, list_arg[2], int(list_arg[3]))
+                        elif HBNBCommand.RepresentsFloat(list_arg[3]):
+                            setattr(obj, list_arg[2], float(list_arg[3]))
+                        else:
+                            setattr(obj, list_arg[2], list_arg[3])
                         storage.save()
                     else:
                         print("** value missing **")
@@ -165,6 +172,22 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
         else:
             print("** class name missing **")
+
+    @staticmethod
+    def RepresentsInt(str):
+        try:
+            int(str)
+            return True
+        except ValueError:
+            return False
+
+    @staticmethod
+    def RepresentsFloat(str):
+        try:
+            float(str)
+            return True
+        except ValueError:
+            return False
 
 
 if __name__ == '__main__':
