@@ -124,6 +124,48 @@ class HBNBCommand(cmd.Cmd):
         msg += "based or not on the class name"
         print(msg)
 
+    def do_update(self, arg):
+        """Updates an instance based on the class name
+        and id by adding or updating attribute"""
+
+        if len(arg) > 0:
+            objects = storage.all()
+            list_arg = arg.split()
+            if len(list_arg) == 1:
+                clsObjs = [str(v) for k, v in objects.items()
+                           if arg == k.split('.')[0]]
+                if len(clsObjs) > 0:
+                    print("** instance id missing **")
+                else:
+                    print("** class doesn't exist **")
+            elif len(list_arg) == 2:
+                clsId = '.'.join(list_arg)
+                if clsId in objects:
+                    print("** attribute name missing **")
+                else:
+                    print("** no instance found **")
+            elif len(list_arg) == 3:
+                clsId = list_arg[0] + '.' + list_arg[1]
+                if clsId in objects:
+                    if list_arg[2] not in objects[clsId].to_dict():
+                        print("** value missing **")
+                else:
+                    print("** no instance found **")
+            else:
+                clsId = list_arg[0] + '.' + list_arg[1]
+                if clsId in objects:
+                    if list_arg[2] in objects[clsId].to_dict():
+                        obj = objects[clsId]
+                        # TODO: Change and cast the attr to update
+                        setattr(obj, list_arg[2], list_arg[3])
+                        storage.save()
+                    else:
+                        print("** value missing **")
+                else:
+                    print("** no instance found **")
+        else:
+            print("** class name missing **")
+
 
 if __name__ == '__main__':
     HBNBCommand().cmdloop()
