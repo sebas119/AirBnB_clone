@@ -2,10 +2,11 @@
 
 """Defines the HBNH command line."""
 
+import cmd
 from shlex import split
 from models.base_model import BaseModel
+from models.user import User
 from models import storage
-import cmd
 
 
 class HBNBCommand(cmd.Cmd):
@@ -13,6 +14,10 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
     file = None
+    __models_cls = {
+        "BaseModel",
+        "User"
+    }
 
     def emptyline(self):
         """Empty line method"""
@@ -38,10 +43,9 @@ class HBNBCommand(cmd.Cmd):
         """Create a BaseModel and save the json in a file"""
 
         if len(arg) > 0:
-            if BaseModel.__name__ == arg:
-                bm = BaseModel()
-                bm.save()
-                print(bm.id)
+            if arg in HBNBCommand.__models_cls:
+                print(eval(arg)().id)
+                storage.save()
             else:
                 print("** class doesn't exist **")
         else:
