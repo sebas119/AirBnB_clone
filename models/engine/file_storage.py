@@ -7,6 +7,12 @@
 import json
 import models
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.city import City
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 
 
 class FileStorage:
@@ -27,10 +33,8 @@ class FileStorage:
     def save(self):
         """Save object representation of JSON to a file"""
 
-        to_json = {}
         with open(self.__file_path, mode='w', encoding='UTF-8') as myfile:
-            for key, val in self.__objects.items():
-                to_json[key] = val.to_dict()
+            to_json = {k: v.to_dict() for k, v in self.__objects.items()}
             json.dump(to_json, myfile)
 
     def reload(self):
@@ -41,7 +45,7 @@ class FileStorage:
             with open(self.__file_path, mode='r', encoding="UTF-8") as myfile:
                 from_json = json.load(myfile)
                 for key, value in from_json.items():
-                    bm = BaseModel(**value)
-                    self.__objects[key] = bm
+                    attr_cls_name = value.pop("__class__")
+                    self.new(eval(attr_cls_name)(**value))
         except:
             pass

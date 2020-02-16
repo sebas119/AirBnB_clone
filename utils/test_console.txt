@@ -1,0 +1,21 @@
+""" TESTING THE COMMAND LINE INTERPRETER """
+
+# Testing update command
+
+# Base Model
+
+update BaseModel b1ee3a6c-a3de-4835-92bb-4a1678525395 name "Sebastian Lopez"
+
+update BaseModel b1ee3a6c-a3de-4835-92bb-4a1678525395 my_number "3157003382"
+
+update BaseModel b1ee3a6c-a3de-4835-92bb-4a1678525395 name "Camilo jose" my_number 132123132
+
+# User Model
+
+create User
+
+show User <id>
+
+destroy User <id>
+
+update User <id> <attr> "Sebastian"
