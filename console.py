@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
     file = None
-    __models_cls = {
+    __classes = {
         "BaseModel",
         "User",
         "Place",
@@ -31,6 +31,52 @@ class HBNBCommand(cmd.Cmd):
         "Amenity",
         "Review"
     }
+
+    __commands = {
+        "show",
+        "count",
+        "all",
+        "destroy",
+        "update"
+    }
+
+    def precmd(self, line):
+        """Get the line before interpretate"""
+        if len(line):
+            l_c = line.split()
+            if len(l_c):
+                ll_cc = l_c[0].split("(")
+                c_l = ll_cc[0].split(".")
+                if len(c_l) == 2 and len(ll_cc) == 2 and ll_cc[1] == ")":
+                    if c_l[0] in self.__classes and c_l[1] in self.__commands:
+                        return c_l[1] + " " + c_l[0]
+                    else:
+                        return line
+                else:
+                    return line
+            else:
+                return line
+        else:
+            return line
+
+    def do_count(self, argv):
+        """Count how much instances have a given class"""
+        l_c = argv.split()
+        all_instances = storage.all()
+        if l_c[0] in self.__classes:
+            num = 0
+            for k, ob in all_instances.items():
+                if l_c[0] in k:
+                    num = num + 1
+            print(num)
+        else:
+            print("** class doesn't exist **")
+
+    def help_count(self):
+        """Help command for count"""
+
+        msg = "Count how much instances have a given class\n"
+        print(msg)
 
     def emptyline(self):
         """Empty line method"""
@@ -43,20 +89,23 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def help_quit(self):
+        """Help command for quit"""
         print("Quit command to exit the program\n")
 
     def do_EOF(self, line):
         """EOF command to exit the program"""
+        print()
         return True
 
     def help_EOF(self):
+        """Help command for EOF"""
         print("EOF command to exit the program\n")
 
     def do_create(self, arg):
         """Create a BaseModel and save the json in a file"""
 
         if len(arg) > 0:
-            if arg in HBNBCommand.__models_cls:
+            if arg in HBNBCommand.__classes:
                 print(eval(arg)().id)
                 storage.save()
             else:
@@ -65,6 +114,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def help_create(self):
+        """Help command for create"""
         print("Create a BaseModel and save the json in a file\n")
 
     def do_show(self, arg):
@@ -91,6 +141,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def help_show(self):
+        """Help command for show"""
 
         msg = "Prints the string representation of an instance "
         msg += "based on the class name and id\n"
@@ -120,6 +171,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def help_destroy(self):
+        """Help command for destroy"""
         print("Deletes an instance based on the class name and id\n")
 
     def do_all(self, arg):
@@ -139,9 +191,10 @@ class HBNBCommand(cmd.Cmd):
             print(allObjs)
 
     def help_all(self):
+        """Help command for all"""
 
         msg = "Prints all string representation of all instances "
-        msg += "based or not on the class name"
+        msg += "based or not on the class name\n"
         print(msg)
 
     def do_update(self, arg):
@@ -189,6 +242,15 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
         else:
             print("** class name missing **")
+
+    def help_update(self):
+        """Help command for update"""
+
+        msg = "Updates an instance based on the class "
+        msg += "name and id by adding or updating attribute\n"
+        msg += "Usage: update <class name> <id> <attribute name>  "
+        msg += "\"<attribute value>\"\n"
+        print(msg)
 
     @staticmethod
     def RepresentsInt(str):
