@@ -41,7 +41,7 @@ class HBNBCommand(cmd.Cmd):
     }
 
     def precmd(self, line):
-        """ Get the line before interpretate"""
+        """Get the line before interpretate"""
         if len(line):
             l_c = line.split()
             if len(l_c):
@@ -60,7 +60,7 @@ class HBNBCommand(cmd.Cmd):
             return line
 
     def do_count(self, argv):
-        """ Count how much instances have a given class"""
+        """Count how much instances have a given class"""
         l_c = argv.split()
         all_instances = storage.all()
         if l_c[0] in self.__classes:
@@ -71,6 +71,12 @@ class HBNBCommand(cmd.Cmd):
             print(num)
         else:
             print("** class doesn't exist **")
+
+    def help_count(self):
+        """Help command for count"""
+
+        msg = "Count how much instances have a given class\n"
+        print(msg)
 
     def emptyline(self):
         """Empty line method"""
@@ -83,6 +89,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def help_quit(self):
+        """Help command for quit"""
         print("Quit command to exit the program\n")
 
     def do_EOF(self, line):
@@ -90,6 +97,7 @@ class HBNBCommand(cmd.Cmd):
         return True
 
     def help_EOF(self):
+        """Help command for EOF"""
         print("EOF command to exit the program\n")
 
     def do_create(self, arg):
@@ -105,6 +113,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def help_create(self):
+        """Help command for create"""
         print("Create a BaseModel and save the json in a file\n")
 
     def do_show(self, arg):
@@ -131,6 +140,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def help_show(self):
+        """Help command for show"""
 
         msg = "Prints the string representation of an instance "
         msg += "based on the class name and id\n"
@@ -160,6 +170,7 @@ class HBNBCommand(cmd.Cmd):
             print("** class name missing **")
 
     def help_destroy(self):
+        """Help command for destroy"""
         print("Deletes an instance based on the class name and id\n")
 
     def do_all(self, arg):
@@ -179,9 +190,10 @@ class HBNBCommand(cmd.Cmd):
             print(allObjs)
 
     def help_all(self):
+        """Help command for all"""
 
         msg = "Prints all string representation of all instances "
-        msg += "based or not on the class name"
+        msg += "based or not on the class name\n"
         print(msg)
 
     def do_update(self, arg):
@@ -229,6 +241,15 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
         else:
             print("** class name missing **")
+
+    def help_update(self):
+        """Help command for update"""
+
+        msg = "Updates an instance based on the class "
+        msg += "name and id by adding or updating attribute\n"
+        msg += "Usage: update <class name> <id> <attribute name>  "
+        msg += "\"<attribute value>\"\n"
+        print(msg)
 
     @staticmethod
     def RepresentsInt(str):
