@@ -22,7 +22,7 @@ class HBNBCommand(cmd.Cmd):
 
     prompt = '(hbnb) '
     file = None
-    __models_cls = {
+    __classes = {
         "BaseModel",
         "User",
         "Place",
@@ -31,6 +31,46 @@ class HBNBCommand(cmd.Cmd):
         "Amenity",
         "Review"
     }
+
+    __commands = {
+        "show",
+        "count",
+        "all",
+        "destroy",
+        "update"
+    }
+
+    def precmd(self, line):
+        """ Get the line before interpretate"""
+        if len(line):
+            l_c = line.split()
+            if len(l_c):
+                ll_cc = l_c[0].split("(")
+                c_l = ll_cc[0].split(".")
+                if len(c_l) == 2:
+                    if c_l[0] in self.__classes and c_l[1] in self.__commands:
+                        return c_l[1] + " " + c_l[0]
+                    else:
+                        return line
+                else:
+                    return line
+            else:
+                return line
+        else:
+            return line
+
+    def do_count(self, argv):
+        """ Count how much instances have a given class"""
+        l_c = argv.split()
+        all_instances = storage.all()
+        if l_c[0] in self.__classes:
+            num = 0
+            for k, ob in all_instances.items():
+                if l_c[0] in k:
+                    num = num + 1
+            print(num)
+        else:
+            print("** class doesn't exist **")
 
     def emptyline(self):
         """Empty line method"""
@@ -56,7 +96,7 @@ class HBNBCommand(cmd.Cmd):
         """Create a BaseModel and save the json in a file"""
 
         if len(arg) > 0:
-            if arg in HBNBCommand.__models_cls:
+            if arg in HBNBCommand.__classes:
                 print(eval(arg)().id)
                 storage.save()
             else:
