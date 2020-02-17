@@ -47,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
             if len(l_c):
                 ll_cc = l_c[0].split("(")
                 c_l = ll_cc[0].split(".")
-                if len(c_l) == 2:
+                if len(c_l) == 2 and len(ll_cc) == 2 and ll_cc[1] == ")":
                     if c_l[0] in self.__classes and c_l[1] in self.__commands:
                         return c_l[1] + " " + c_l[0]
                     else:
@@ -94,6 +94,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, line):
         """EOF command to exit the program"""
+        print()
         return True
 
     def help_EOF(self):
