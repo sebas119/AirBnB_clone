@@ -4,10 +4,11 @@
     Defines a class TestBaseModel.
 """
 
-import models
-import tests
+
 from models.base_model import BaseModel
 import unittest
+import models
+import os
 
 
 class TestBaseModel(unittest.TestCase):
@@ -51,6 +52,16 @@ class TestBaseModel(unittest.TestCase):
         )
         self.assertIsNotNone(BaseModel.__doc__, "No docstring in the class")
 
+    def test_permissions_file(self):
+        """Test File base_model.py permissions"""
+
+        test_file = os.access("models/base_model.py", os.R_OK)
+        self.assertTrue(test_file, "Read permissions")
+        test_file = os.access("models/base_model.py", os.W_OK)
+        self.assertTrue(test_file, "Write Permissions")
+        test_file = os.access("models/base_model.py", os.X_OK)
+        self.assertTrue(test_file, "Execute permissions")
+
     def test_mod_to_dict(self):
         """Test dictionary representation in BaseModel"""
 
@@ -62,3 +73,14 @@ class TestBaseModel(unittest.TestCase):
         self.assertEqual(
             str(type(self.base_model)),
             "<class 'models.base_model.BaseModel'>")
+        self.assertIsInstance(self.base_model, BaseModel)
+
+    def test_str_representation(self):
+        """Test str representation of BaseModel"""
+
+        str_rep = "[{:s}] ({:s}) {:s}".format(
+            self.base_model.__class__.__name__,
+            self.base_model.id,
+            str(self.base_model.__dict__)
+        )
+        self.assertEqual(str_rep, str(self.base_model))
