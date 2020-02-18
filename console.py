@@ -124,9 +124,11 @@ class HBNBCommand(cmd.Cmd):
         if len(arg) > 0:
             list_arg = arg.split()
             objects = storage.all()
-            if len(list_arg) == 2:
-                clsId = '.'.join(list_arg)
-                if clsId in objects:
+            if len(list_arg) >= 2:
+                clsId = list_arg[0] + '.' + list_arg[1]
+                if list_arg[0] not in self.__classes:
+                    print("** class doesn't exist **")
+                elif clsId in objects:
                     print(objects[clsId])
                 else:
                     print("** no instance found **")
@@ -153,9 +155,11 @@ class HBNBCommand(cmd.Cmd):
         if len(arg) > 0:
             list_arg = arg.split()
             objects = storage.all()
-            if len(list_arg) == 2:
-                clsId = '.'.join(list_arg)
-                if clsId in objects:
+            if len(list_arg) >= 2:
+                clsId = list_arg[0] + '.' + list_arg[1]
+                if list_arg[0] not in self.__classes:
+                    print("** class doesn't exist **")
+                elif clsId in objects:
                     del objects[clsId]
                     storage.save()
                 else:
@@ -180,8 +184,9 @@ class HBNBCommand(cmd.Cmd):
 
         objects = storage.all()
         if len(arg) > 0:
+            list_arg = arg.split()
             clsObjs = [str(v) for k, v in objects.items()
-                       if arg == k.split('.')[0]]
+                       if list_arg[0] == k.split('.')[0]]
             if len(clsObjs) > 0:
                 print(clsObjs)
             else:
@@ -213,13 +218,17 @@ class HBNBCommand(cmd.Cmd):
                     print("** class doesn't exist **")
             elif len(list_arg) == 2:
                 clsId = '.'.join(list_arg)
-                if clsId in objects:
+                if list_arg[0] not in self.__classes:
+                    print("** class doesn't exist **")
+                elif clsId in objects:
                     print("** attribute name missing **")
                 else:
                     print("** no instance found **")
             elif len(list_arg) == 3:
                 clsId = list_arg[0] + '.' + list_arg[1]
-                if clsId in objects:
+                if list_arg[0] not in self.__classes:
+                    print("** class doesn't exist **")
+                elif clsId in objects:
                     if list_arg[2] not in objects[clsId].to_dict():
                         print("** value missing **")
                 else:
