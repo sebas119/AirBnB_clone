@@ -5,6 +5,7 @@
 """
 
 import models
+import tests
 from models.base_model import BaseModel
 import unittest
 
@@ -42,6 +43,7 @@ class TestBaseModel(unittest.TestCase):
         self.assertIsInstance(self.base_model.id, str)
 
     def test_docstring(self):
+        """Test docstring for the module and the class"""
 
         self.assertIsNotNone(
             models.base_model.__doc__,
