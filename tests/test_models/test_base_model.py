@@ -4,6 +4,7 @@
     Defines a class TestBaseModel.
 """
 
+import models
 from models.base_model import BaseModel
 import unittest
 
@@ -39,3 +40,23 @@ class TestBaseModel(unittest.TestCase):
         """Test the id type from BaseModel"""
 
         self.assertIsInstance(self.base_model.id, str)
+
+    def test_docstring(self):
+
+        self.assertIsNotNone(
+            models.base_model.__doc__,
+            "No docstring in the module"
+        )
+        self.assertIsNotNone(BaseModel.__doc__, "No docstring in the class")
+
+    def test_mod_to_dict(self):
+        """Test dictionary representation in BaseModel"""
+
+        self.assertIsInstance(self.base_model.to_dict(), dict)
+
+    def test_type_object(self):
+        """Test type object of BaseModel"""
+
+        self.assertEqual(
+            str(type(self.base_model)),
+            "<class 'models.base_model.BaseModel'>")
