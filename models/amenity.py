@@ -11,8 +11,3 @@ class Amenity(BaseModel):
     """Represent a Amenity."""
 
     name = ""
-
-    def __init__(self, *args, **kwargs):
-        """Initialize a new Amenity"""
-
-        super().__init__(*args, **kwargs)
