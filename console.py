@@ -4,6 +4,7 @@
 
 
 import cmd
+import json
 
 from shlex import split
 
@@ -45,6 +46,7 @@ class HBNBCommand(cmd.Cmd):
         if len(line):
             l_c = line.split()
             if len(l_c):
+                l_last = line.split("{")
                 l_upd = line.split("\"")
                 all_instances = storage.all()
                 ll_cc = l_c[0].split("(")
@@ -53,7 +55,6 @@ class HBNBCommand(cmd.Cmd):
                     l_arg = ll_cc[1].split("\"")
                 else:
                     return line
-                print(l_upd, len(l_upd))
                 if len(c_l) == 2 and c_l[0] in self.__classes\
                         and c_l[1] in self.__commands:
                     s_c = c_l[1] + " " + c_l[0]
@@ -64,6 +65,22 @@ class HBNBCommand(cmd.Cmd):
                     elif len(l_upd) == 7 and l_upd[6] == ")":
                         return s_c + " " + l_arg[1] + " "\
                             + l_upd[3] + " \"" + l_upd[5] + "\""
+                    elif len(l_last):
+                        print(l_last)
+                        try:
+                            dict_up = json.loads(str("{" + l_last[1][:-1]))
+                            print(dict_up)
+                            s_c = c_l[0] + " " + l_arg[1]
+                            for k, v in dict_up.items():
+                                print("entro qui")
+                                print(c_l[1] + " " + s_c + " \"" +
+                                      k + "\" \"" + str(v) + "\"")
+                                self.do_update(
+                                    s_c + " \"" + k + "\" \"" + str(v) + "\"")
+                            return c_l[1] + " " + s_c + " \"" + k + "\" \"" + str(v) + "\""
+                        except Exception as e:
+                            print("except {}".format(e))
+                            return line
                     else:
                         return line
                 else:
