@@ -105,8 +105,9 @@ class HBNBCommand(cmd.Cmd):
         """Create a BaseModel and save the json in a file"""
 
         if len(arg) > 0:
-            if arg in HBNBCommand.__classes:
-                print(eval(arg)().id)
+            list_arg = arg.split()
+            if list_arg[0] in HBNBCommand.__classes:
+                print(eval(list_arg[0])().id)
                 storage.save()
             else:
                 print("** class doesn't exist **")
@@ -235,7 +236,9 @@ class HBNBCommand(cmd.Cmd):
                     print("** no instance found **")
             else:
                 clsId = list_arg[0] + '.' + list_arg[1]
-                if clsId in objects:
+                if list_arg[0] not in self.__classes:
+                    print("** class doesn't exist **")
+                elif clsId in objects:
                     if list_arg[2] in objects[clsId].to_dict():
                         obj = objects[clsId]
                         if HBNBCommand.RepresentsInt(list_arg[3]):
@@ -244,7 +247,7 @@ class HBNBCommand(cmd.Cmd):
                             setattr(obj, list_arg[2], float(list_arg[3]))
                         else:
                             setattr(obj, list_arg[2], list_arg[3])
-                        storage.save()
+                        obj.save()
                     else:
                         print("** value missing **")
                 else:
