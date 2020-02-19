@@ -230,7 +230,7 @@ class HBNBCommand(cmd.Cmd):
                 if list_arg[0] not in self.__classes:
                     print("** class doesn't exist **")
                 elif clsId in objects:
-                    if list_arg[2] not in objects[clsId].to_dict():
+                    if list_arg[2]:
                         print("** value missing **")
                 else:
                     print("** no instance found **")
@@ -239,7 +239,7 @@ class HBNBCommand(cmd.Cmd):
                 if list_arg[0] not in self.__classes:
                     print("** class doesn't exist **")
                 elif clsId in objects:
-                    if list_arg[2] in objects[clsId].to_dict():
+                    if list_arg[2]:
                         obj = objects[clsId]
                         if HBNBCommand.RepresentsInt(list_arg[3]):
                             setattr(obj, list_arg[2], int(list_arg[3]))
