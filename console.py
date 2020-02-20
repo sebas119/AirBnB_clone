@@ -66,20 +66,17 @@ class HBNBCommand(cmd.Cmd):
                         return s_c + " " + l_arg[1] + " "\
                             + l_upd[3] + " \"" + l_upd[5] + "\""
                     elif len(l_last):
-                        print(l_last)
                         try:
-                            dict_up = json.loads(str("{" + l_last[1][:-1]))
-                            print(dict_up)
+                            dict_up = json.loads(
+                                str("{" + l_last[1][:-1].replace("'", "\"")))
                             s_c = c_l[0] + " " + l_arg[1]
                             for k, v in dict_up.items():
-                                print("entro qui")
-                                print(c_l[1] + " " + s_c + " \"" +
-                                      k + "\" \"" + str(v) + "\"")
                                 self.do_update(
                                     s_c + " \"" + k + "\" \"" + str(v) + "\"")
-                            return c_l[1] + " " + s_c + " \"" + k + "\" \"" + str(v) + "\""
-                        except Exception as e:
-                            print("except {}".format(e))
+                            ans = c_l[1] + " " + s_c + " \"" + \
+                                k + "\" \"" + str(v) + "\""
+                            return ans
+                        except:
                             return line
                     else:
                         return line
