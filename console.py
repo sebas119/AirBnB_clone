@@ -67,12 +67,15 @@ class HBNBCommand(cmd.Cmd):
                             + l_upd[3] + " \"" + l_upd[5] + "\""
                     elif len(l_last):
                         try:
-                            dict_up = json.loads(str("{" + l_last[1][:-1].replace("'", "\"")))
+                            dict_up = json.loads(
+                                str("{" + l_last[1][:-1].replace("'", "\"")))
                             s_c = c_l[0] + " " + l_arg[1]
                             for k, v in dict_up.items():
                                 self.do_update(
                                     s_c + " \"" + k + "\" \"" + str(v) + "\"")
-                            return c_l[1] + " " + s_c + " \"" + k + "\" \"" + str(v) + "\""
+                            ans = c_l[1] + " " + s_c + " \"" + \
+                                k + "\" \"" + str(v) + "\""
+                            return ans
                         except:
                             return line
                     else:
